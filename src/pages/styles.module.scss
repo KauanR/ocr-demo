@@ -1,0 +1,40 @@
+.wrap {
+    width: 100%;
+    display: grid;
+    row-gap: 3rem;
+
+    .head {
+        text-align: center;
+    }
+
+    .inputCard {
+        width: 80%;
+        margin: 0 auto;
+        text-align: center;
+        
+        .actions {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            row-gap: 1rem;
+            padding: 16px;
+
+            div.inputs {
+                display: flex;
+                justify-content: center;
+                column-gap: .5rem;
+                width: 100%;
+
+                .urlField {
+                    width: 60%;
+                }
+
+                .langField {
+                    width: 20%;
+                }
+            }
+            
+        }
+
+    }
+}

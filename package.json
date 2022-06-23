@@ -13,9 +13,12 @@
         "@emotion/styled": "^11.9.3",
         "@mui/icons-material": "^5.8.4",
         "@mui/material": "^5.8.5",
+        "formik": "^2.2.9",
         "next": "12.1.6",
         "react": "18.2.0",
-        "react-dom": "18.2.0"
+        "react-dom": "18.2.0",
+        "tesseract.js": "^2.1.1",
+        "yup": "^0.32.11"
     },
     "devDependencies": {
         "@types/node": "18.0.0",
