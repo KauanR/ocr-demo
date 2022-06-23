@@ -1,8 +1,8 @@
-import { FC, useEffect, useState } from 'react'
-import { createWorker } from 'tesseract.js'
+import { FC, useMemo, useState } from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, CircularProgress, Typography } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import styles from './ImgCheck.module.scss'
+import axios from 'axios'
 
 export interface ImgCheckProps {
     number: number
@@ -13,34 +13,26 @@ export interface ImgCheckProps {
 const ImgCheck: FC<ImgCheckProps> = ({ number, url, language }) => {
 
     const [result, setResult] = useState('')
-    const [loading, setLoading] = useState(0)
+    const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
 
     async function load(): Promise<void> {
-        const worker = createWorker({
-            logger: log => {
-                if(log.status === 'recognizing text')
-                    setLoading(Math.trunc(log.progress * 100))
-            }
-        })
+        setLoading(true)
 
-        try {
-            await worker.load()
-            await worker.loadLanguage(language)
-            await worker.initialize(language)
-    
-            const { data: { text } } = await worker.recognize(url)
-
-            setResult(text)
-    
-            await worker.terminate()
-        } catch(err: any) {
-            console.log(err)
-            setError(err.message || err)
-        }
+        axios.post('http://localhost:3333/', { url, lang: language })
+            .then(res => {
+                const { data: { text } } = res
+                setResult(text)
+            })
+            .catch(err => {
+                setError(err.message || err)
+            })
+            .finally(() => {
+                setLoading(false)
+            })
     }
 
-    useEffect(() => {
+    useMemo(() => {
         load()
     }, [])
 
@@ -56,18 +48,13 @@ const ImgCheck: FC<ImgCheckProps> = ({ number, url, language }) => {
                 <div className={styles.imgGrid}>
                     <img src={url} />
                     {
-                        !result && !error && 
+                        loading && !result && !error && 
                         <div className={styles.loading}>
-                            <CircularProgress variant='determinate' value={loading} />
-                            <div className={styles.text}>
-                                <Typography variant='caption' color='text.secondary'>
-                                    {loading}%
-                                </Typography>
-                            </div>
+                            <CircularProgress variant='indeterminate' size='4rem' />
                         </div>
                     }
                     {
-                        error &&
+                        !loading && error &&
                         <div className={styles.error}>
                             <Typography variant='body1'>
                                 Um erro ocorreu um erro ao tentar converter a imagem, confira o console para mais detalhes:
@@ -78,8 +65,8 @@ const ImgCheck: FC<ImgCheckProps> = ({ number, url, language }) => {
                         </div>
                     }
                     {
-                        result &&
-                        <pre>
+                        !loading && result &&
+                        <pre className={styles.text}>
                             { result }
                         </pre>
                     }
