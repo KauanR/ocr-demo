@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField'
 import { useField } from 'formik'
 
-const TextFieldWrapper = ({name, showErrorMsg = true, ...otherProps}) => {
+const TextFieldWrapper = ({name = '', showErrorMsg = true, ...otherProps}) => {
     const [field, control] = useField(name)
 
     const fieldConfig: any = {
