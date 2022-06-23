@@ -9,16 +9,23 @@ import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '../components/TextField'
 
+interface Images {
+    key: string
+    imgCheck: ImgCheckProps
+}
+
 const Home: NextPage = () => {
 
-    const [images, setImages] = useState([] as ImgCheckProps[])
+    const [images, setImages] = useState([] as Images[])
 
     function addImage(values: any): void {
-        const newImage: ImgCheckProps = {
+        const newImage: Images = {
             key: new Date().toISOString(),
-            number: images.length + 1,
-            language: values.lang,
-            url: values.url
+            imgCheck: {
+                number: images.length + 1,
+                language: values.lang,
+                url: values.url
+            }
         }
 
         setImages(curValue => [...curValue, newImage])
@@ -101,14 +108,11 @@ const Home: NextPage = () => {
                         </Form>
                     )}
                 </Formik>
-                <form className={styles.actions} onSubmit={e => addImage(e)}>
-
-                </form>
             </Card>
 
             <div>
                 {
-                    images.map(img => <ImgCheck {...img} />)
+                    images.map(img => <ImgCheck key={img.key} {...img.imgCheck} />)
                 }
             </div>
         </div>

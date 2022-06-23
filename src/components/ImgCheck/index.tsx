@@ -5,7 +5,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import styles from './ImgCheck.module.scss'
 
 export interface ImgCheckProps {
-    key: string
     number: number
     url: string
     language: string
